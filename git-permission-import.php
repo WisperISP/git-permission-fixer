@@ -26,34 +26,59 @@ foreach ($filesArray as $file){
 }
 
 $cleanFileArray = array();
+$dirtyFileArray = array();
 
 foreach ($filesArray as $file){
-    $filePath = $file['filePath'];
-    $lock = 0;
-    foreach ($ignoreArray as $ignoreFilePath) {
-        if (strpos($filePath, $ignoreFilePath) == false) {
-            if ($lock == 0) {
-                array_push($cleanFileArray, $file);
-            }
-            $lock++;
-        }
+
+    $includeinArray = fixArray($file, $ignoreArray);
+
+    if($includeinArray == true){
+        array_push($cleanFileArray, $file);
+    }else{
+        array_push($dirtyFileArray, $file);
     }
+
 }
 
-    echo count($cleanFileArray);
+function fixArray($file, $ignoreArray){
+    $filePath = $file['filePath'];
+    $count = 0;
+    $returnVar = true;
+
+    foreach ($ignoreArray as $ignoreFilePath) {
+        if (strpos($filePath, $ignoreFilePath) !== false) {
+            $dontIgnore = false;
+            if(($dontIgnore != true) || ($count == 0)){
+                $returnVar = $dontIgnore;
+            }
+        }else{
+            $dontIgnore = true;
+            if(($dontIgnore != true) || ($count == 0)){
+                $returnVar = $dontIgnore;
+            }
+        }
+        $count++;
+    }
+
+    return $returnVar;
+
+}
 
 foreach ($cleanFileArray as $file){
     $filePath = $file['filePath'];
     $trueFilePath = $file['realFilePath'];
     $userName = $file['permName'];
     $userGroup = $file['permGroup'];
+    $mode = $file['filePerms'];
 
     $ownerChanged = changeOwners($filePath, $trueFilePath,  $userName);
     $groupChanged = changeOwnerGroup($filePath, $trueFilePath,  $userGroup);
+    $filePermChanged = changeFilePerm($filePath, $trueFilePath,  $mode);
 
     $permissionChangedArray = array(
         'ownerChanged' => $ownerChanged,
         'groupChanged' => $groupChanged,
+        'filePermChanged' => $filePermChanged,
         'filePath' => $filePath,
         'realFilePath' => $trueFilePath
     );
@@ -90,4 +115,17 @@ function changeOwnerGroup($file, $trueFilePath, $group){
         $chgrpReturn = 'jsmith';
     }
     return $chgrpReturn;
+}
+
+function changeFilePerm($file, $trueFilePath, $mode){
+    if((strpos($file, '.git') == false) || (strpos($trueFilePath, '.git') == false)){
+        if(($file == $trueFilePath) || (strpos($trueFilePath, '/..') != false ) || (strpos($trueFilePath, '/.') != false )){
+            $chmodReturn = chmod($file, $mode);
+        }else{
+            $chmodReturn = chmod($trueFilePath, $mode);
+        }
+    }else{
+        $chmodReturn = 'jsmith';
+    }
+    return $chmodReturn;
 }
