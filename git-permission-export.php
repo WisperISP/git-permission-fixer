@@ -10,13 +10,17 @@ foreach(new RecursiveIteratorIterator($it) as $file)
     $fileNameAndPath = $file->getRealPath();
     $filePermisionName = getOwners($fileNameAndPath);
     $filePermisionGroup = getOwnerGroup($fileNameAndPath);
+    $filePermisions = fileperms($fileNameAndPath);
+    $fileName = $file->getFilename();
 
     $trueFilePath = $file->getPathname();
 
     $fileArray = array(
         'filePath' => $fileNameAndPath,
+        'fileName' => $fileName,
         'permName' => $filePermisionName,
         'permGroup' => $filePermisionGroup,
+        'filePerms' => $filePermisions,
         'realFilePath' => str_replace("../","/usr/local/", $trueFilePath)
 
     );
