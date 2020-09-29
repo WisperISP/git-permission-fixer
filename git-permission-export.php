@@ -32,6 +32,9 @@ fclose($myfile);
 function getOwners($file){
     $ownerID = fileowner($file);
     $owner = posix_getpwuid($ownerID);
+    if($owner['name'] == null){
+        $owner['name'] = $ownerID;
+    }
     return $owner['name'];
 }
 
