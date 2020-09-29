@@ -11,6 +11,11 @@ Clone the Repo:
 git clone https://github.com/WisperISP/git-permission-fixer
 ```
 
+Edit the Config: ** coming soon
+```bash
+nano config.json
+```
+
 
 
 ## Export Git Repo Permissions
