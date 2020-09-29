@@ -17,7 +17,7 @@ foreach(new RecursiveIteratorIterator($it) as $file)
         'filePath' => $fileNameAndPath,
         'permName' => $filePermisionName,
         'permGroup' => $filePermisionGroup,
-        'realFilePath' => $trueFilePath
+        'realFilePath' => str_replace("../","/usr/local/", $trueFilePath)
 
     );
 

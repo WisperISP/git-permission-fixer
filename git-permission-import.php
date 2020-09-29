@@ -30,16 +30,18 @@ fwrite($myfile, json_encode($changedArray));
 fclose($myfile);
 
 function changeOwners($file , $trueFilePath,  $user){
-    $chownReturn = chown($file, $user);
-    if ($chownReturn == null){
+    if($file == $trueFilePath){
+        $chownReturn = chown($file, $user);
+    }else{
         $chownReturn = lchown($trueFilePath, $user);
     }
     return $chownReturn;
 }
 
 function changeOwnerGroup($file, $trueFilePath, $group){
-    $chgrpReturn = chgrp($file, $group);
-    if ($chgrpReturn == null){
+    if($file == $trueFilePath){
+        $chgrpReturn = chgrp($file, $group);
+    }else{
         $chgrpReturn = lchgrp($trueFilePath, $group);
     }
     return $chgrpReturn;
