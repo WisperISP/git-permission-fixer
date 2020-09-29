@@ -11,10 +11,13 @@ foreach(new RecursiveIteratorIterator($it) as $file)
     $filePermisionName = getOwners($fileNameAndPath);
     $filePermisionGroup = getOwnerGroup($fileNameAndPath);
 
+    $trueFilePath = $file->getPathname();
+
     $fileArray = array(
         'filePath' => $fileNameAndPath,
         'permName' => $filePermisionName,
-        'permGroup' => $filePermisionGroup
+        'permGroup' => $filePermisionGroup,
+        'realFilePath' => $trueFilePath
 
     );
 
