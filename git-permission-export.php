@@ -4,8 +4,6 @@ $dir = "../norm/";
 
 $filesArray = array();
 
-$myfilecsv = fopen("git-permission-store.csv", "w");
-
 $it = new RecursiveDirectoryIterator($dir);
 foreach(new RecursiveIteratorIterator($it) as $file)
 {
@@ -20,12 +18,8 @@ foreach(new RecursiveIteratorIterator($it) as $file)
 
     );
 
-    fputcsv($myfilecsv, $fileArray);
-
     array_push($filesArray, $fileArray);
 }
-
-fclose($myfilecsv);
 
 
 //print_r($filesArray);
